@@ -1,0 +1,27 @@
+{
+  "name": "woisks/tag",
+  "description": "woisks tag",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "lifenglin",
+      "email": "woisks@126.com"
+    }
+  ],
+  "require": {
+    "php": "^7.1.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "Woisks\\Tag\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Woisks\\Tag\\Providers\\AppServiceProvider"
+      ]
+    },
+    "minimum-stability": "dev"
+  }
+}
