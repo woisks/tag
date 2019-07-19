@@ -15,6 +15,9 @@ declare(strict_types=1);
 namespace Woisks\Tag\Http\Controllers;
 
 
+use DB;
+use Throwable;
+use Woisks\Jwt\Services\JwtService;
 use Woisks\Tag\Http\Requests\CreateTagRequest;
 use Woisks\Tag\Models\Services\CreateTagService;
 
@@ -46,18 +49,46 @@ class CreateController extends BaseController
         $this->createTagService = $createTagService;
     }
 
+
     /**
-     * created. 2019/6/19 10:00.
+     * created. 2019/7/19 22:53.
      *
      * @param \Woisks\Tag\Http\Requests\CreateTagRequest $request
      *
-     * @return array
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
     public function created(CreateTagRequest $request)
     {
         $tag = $request->input('tag');
         $type = $request->input('type');
 
-        return $this->createTagService->create($tag, $type);
+        $type_db = $this->createTagService->count($type);
+
+        if (!$type_db) {
+            return res(422, 'type param error');
+        }
+
+        try {
+            DB::beginTransaction();
+
+
+            $type_db->increment('count');
+
+            $tag_db = $this->createTagService->tag($tag);
+
+            $this->createTagService->index($tag_db->id, $type_db->id);
+
+            $this->createTagService->user(JwtService::jwt_account_uid(), $tag_db->id, $type_db->id);
+
+        } catch (Throwable $e) {
+            DB::rollBack();
+
+            return res(422, 'param error');
+        }
+        DB::commit();
+
+        return res(200, 'success', $tag_db->toArray());
+
     }
 }

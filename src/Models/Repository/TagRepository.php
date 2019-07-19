@@ -56,7 +56,7 @@ class TagRepository
     {
         $db = self::$model->firstOrCreate(['name' => $tag], ['id' => create_numeric_id()]);
 
-        $db->increment('count', 1);
+        $db->increment('count');
 
         return $db;
     }

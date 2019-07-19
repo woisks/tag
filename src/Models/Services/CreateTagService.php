@@ -49,9 +49,24 @@ class CreateTagService
      */
     private $indexRepo;
 
+    /**
+     * userRepo.  2019/7/19 22:07.
+     *
+     * @var  \Woisks\Tag\Models\Repository\UserRepository
+     */
     private $userRepo;
 
 
+    /**
+     * CreateTagService constructor. 2019/7/19 22:07.
+     *
+     * @param \Woisks\Tag\Models\Repository\TagRepository   $tagRepo
+     * @param \Woisks\Tag\Models\Repository\CountRepository $typeCountRepo
+     * @param \Woisks\Tag\Models\Repository\IndexRepository $typeIndexRepo
+     * @param \Woisks\Tag\Models\Repository\UserRepository  $userRepo
+     *
+     * @return void
+     */
     public function __construct(TagRepository $tagRepo,
                                 CountRepository $typeCountRepo,
                                 IndexRepository $typeIndexRepo,
@@ -66,18 +81,55 @@ class CreateTagService
     }
 
 
-    public function create($tag, $type)
+    /**
+     * count. 2019/7/19 22:07.
+     *
+     * @param $model
+     *
+     * @return mixed
+     */
+    public function count($model)
     {
+        return $this->countRepo->first($model);
+    }
 
-        $tag_db = $this->tagRepo->firstOrCreated($tag);
-        $type_db = $this->countRepo->firstOrCreated($type);
-        $da = $this->indexRepo->firstOrCreated($type_db->id, $tag_db->id);
-        $dd = $this->userRepo->created($type_db->id, $tag_db->id);
+    /**
+     * tag. 2019/7/19 22:07.
+     *
+     * @param $tag
+     *
+     * @return mixed
+     */
+    public function tag($tag)
+    {
+        return $this->tagRepo->firstOrCreated($tag);
+    }
 
+    /**
+     * index. 2019/7/19 22:07.
+     *
+     * @param $tag_id
+     * @param $type_id
+     *
+     * @return mixed
+     */
+    public function index($tag_id, $type_id)
+    {
+        return $this->indexRepo->firstOrCreated($type_id, $tag_id);
+    }
 
-        return [$tag_db, $type_db, $da, $dd];
-
-
+    /**
+     * user. 2019/7/19 22:07.
+     *
+     * @param $uid
+     * @param $tag_id
+     * @param $type_id
+     *
+     * @return mixed
+     */
+    public function user($uid, $tag_id, $type_id)
+    {
+        return $this->userRepo->created($uid, $type_id, $tag_id);
     }
 
 }

@@ -16,7 +16,6 @@ namespace Woisks\Tag\Http\Controllers;
 
 
 use Woisks\Tag\Http\Requests\GetArrayRequest;
-use Woisks\Tag\Http\Requests\GetRequest;
 use Woisks\Tag\Models\Services\GetTagService;
 
 /**
@@ -50,30 +49,23 @@ class GetController extends BaseController
 
 
     /**
-     * gets. 2019/6/19 11:08.
+     * get. 2019/6/19 11:08.
      *
      * @param \Woisks\Tag\Http\Requests\GetArrayRequest $request
      *
      * @return mixed
      */
-    public function gets(GetArrayRequest $request)
+    public function get(GetArrayRequest $request)
     {
         $tags = $request->input('tag');
 
-        return $this->getService->find($tags);
+        $tag_db = $this->getService->find($tags);
+
+        if ($tag_db->isEmpty()) {
+            return res(422, 'param error');
+        }
+
+        return res(200, 'success', $tag_db->toArray());
     }
 
-    /**
-     * get. 2019/6/19 11:08.
-     *
-     * @param \Woisks\Tag\Http\Requests\GetRequest $request
-     *
-     * @return mixed
-     */
-    public function get(GetRequest $request)
-    {
-        $tag = $request->input('tag');
-
-        return $this->getService->first($tag);
-    }
 }

@@ -46,19 +46,14 @@ class CountRepository
     }
 
     /**
-     * firstOrCreated. 2019/6/14 21:32.
+     * first. 2019/6/14 21:32.
      *
-     * @param $type
+     * @param $model
      *
      * @return mixed
      */
-    public function firstOrCreated($type)
+    public function first($model)
     {
-        $db = self::$model->firstOrCreate(['name' => $type], ['id' => create_numeric_id()]);
-
-        $db->increment('count', 1);
-
-
-        return $db;
+        return self::$model->where('model', $model)->first();
     }
 }

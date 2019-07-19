@@ -21,11 +21,3 @@ Route::prefix('tag')
          Route::get('/', 'GetController@get');
 
      });
-
-Route::prefix('tags')
-     ->namespace('Woisks\Tag\Http\Controllers')
-     ->group(function () {
-
-         Route::get('/', 'GetController@gets');
-
-     });

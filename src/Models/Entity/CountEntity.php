@@ -37,11 +37,11 @@ class CountEntity extends Models
      */
     protected $fillable = [
         'id',
-        'name',
+        'model',
         'count',
-        'readme',
-        'status'
+        'readme'
     ];
+ 
     /**
      * timestamps.  2019/6/14 21:12.
      *

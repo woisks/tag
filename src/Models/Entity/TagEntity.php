@@ -45,6 +45,18 @@ class TagEntity extends Models
     ];
 
     /**
+     * hidden.  2019/7/19 22:25.
+     *
+     * @var  array
+     */
+    protected $hidden = [
+        'status',
+        'is_root',
+        'is_alias',
+        'is_locking'
+    ];
+
+    /**
      * timestamps.  2019/6/14 21:10.
      *
      * @var  bool
