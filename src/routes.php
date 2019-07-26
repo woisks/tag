@@ -14,10 +14,12 @@ declare(strict_types=1);
 
 
 Route::prefix('tag')
+     ->middleware('throttle:60,1')
      ->namespace('Woisks\Tag\Http\Controllers')
      ->group(function () {
 
-         Route::post('/', 'CreateController@created');
          Route::get('/', 'GetController@get');
-
+         Route::middleware('token')->group(function () {
+             Route::post('/', 'CreateController@created');
+         });
      });
