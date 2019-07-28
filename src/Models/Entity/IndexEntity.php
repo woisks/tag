@@ -37,8 +37,9 @@ class IndexEntity extends Models
      */
     protected $fillable = [
         'id',
-        'tag_id',
-        'type_id'
+        'tag',
+        'type',
+        'count'
     ];
 
     public $timestamps = false;

@@ -16,13 +16,13 @@ namespace Woisks\Tag\Models\Entity;
 
 
 /**
- * Class CountEntity.
+ * Class TypeEntity.
  *
  * @package Woisks\Tag\Models\Entity
  *
  * @Author  Maple Grove  <bolelin@126.com> 2019/6/14 21:12
  */
-class CountEntity extends Models
+class TypeEntity extends Models
 {
     /**
      * table.  2019/6/14 21:12.
@@ -37,11 +37,13 @@ class CountEntity extends Models
      */
     protected $fillable = [
         'id',
-        'model',
-        'count',
-        'readme'
+        'type',
+        'name',
+        'readme',
+        'count'
+
     ];
- 
+
     /**
      * timestamps.  2019/6/14 21:12.
      *

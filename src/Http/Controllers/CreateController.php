@@ -15,11 +15,13 @@ declare(strict_types=1);
 namespace Woisks\Tag\Http\Controllers;
 
 
-use DB;
-use Throwable;
+use Illuminate\Http\JsonResponse;
 use Woisks\Jwt\Services\JwtService;
-use Woisks\Tag\Http\Requests\CreateTagRequest;
-use Woisks\Tag\Models\Services\CreateTagService;
+use Woisks\Tag\Http\Requests\CreateRequest;
+use Woisks\Tag\Models\Repository\IndexRepository;
+use Woisks\Tag\Models\Repository\TagRepository;
+use Woisks\Tag\Models\Repository\TypeRepository;
+use Woisks\Tag\Models\Repository\UserRepository;
 
 /**
  * Class CreateController.
@@ -31,64 +33,91 @@ use Woisks\Tag\Models\Services\CreateTagService;
 class CreateController extends BaseController
 {
     /**
-     * createTagService.  2019/6/14 21:54.
+     * indexRepo.  2019/7/28 15:54.
      *
-     * @var  \Woisks\Tag\Models\Services\CreateTagService
+     * @var  IndexRepository
      */
-    private $createTagService;
+    private $indexRepo;
+    /**
+     * tagRepo.  2019/7/28 15:54.
+     *
+     * @var  TagRepository
+     */
+    private $tagRepo;
+    /**
+     * typeRepo.  2019/7/28 15:54.
+     *
+     * @var  TypeRepository
+     */
+    private $typeRepo;
+    /**
+     * userRepo.  2019/7/28 15:54.
+     *
+     * @var  UserRepository
+     */
+    private $userRepo;
 
     /**
-     * CreateController constructor. 2019/6/14 21:54.
+     * CreateController constructor. 2019/7/28 15:54.
      *
-     * @param \Woisks\Tag\Models\Services\CreateTagService $createTagService
+     * @param IndexRepository $indexRepo
+     * @param UserRepository $userRepo
+     * @param TypeRepository $typeRepo
+     * @param TagRepository $tagRepo
      *
      * @return void
      */
-    public function __construct(CreateTagService $createTagService)
+    public function __construct(IndexRepository $indexRepo,
+                                UserRepository $userRepo,
+                                TypeRepository $typeRepo,
+                                TagRepository $tagRepo)
     {
-        $this->createTagService = $createTagService;
+        $this->tagRepo   = $tagRepo;
+        $this->indexRepo = $indexRepo;
+        $this->typeRepo  = $typeRepo;
+        $this->userRepo  = $userRepo;
     }
 
-
     /**
-     * created. 2019/7/19 22:53.
+     * create. 2019/7/28 15:54.
      *
-     * @param \Woisks\Tag\Http\Requests\CreateTagRequest $request
+     * @param CreateRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      * @throws \Exception
      */
-    public function created(CreateTagRequest $request)
+    public function create(CreateRequest $request)
     {
-        $tag = $request->input('tag');
+        $tag  = $request->input('tag');
         $type = $request->input('type');
 
-        $type_db = $this->createTagService->count($type);
-
+        $type_db = $this->typeRepo->first($type);
         if (!$type_db) {
-            return res(422, 'type param error');
+            return res(404, 'param type error or not exists ');
         }
 
         try {
-            DB::beginTransaction();
-
+            \DB::beginTransaction();
 
             $type_db->increment('count');
 
-            $tag_db = $this->createTagService->tag($tag);
+            if (!$this->userRepo->exists(JwtService::jwt_account_uid(), $type, $tag)) {
+                $this->userRepo->created(JwtService::jwt_account_uid(), $type, $tag);
+            }
 
-            $this->createTagService->index($tag_db->id, $type_db->id);
+            $this->indexRepo->firstOrCreated($type, $tag);
 
-            $this->createTagService->user(JwtService::jwt_account_uid(), $tag_db->id, $type_db->id);
+            $tag_db = $this->tagRepo->firstOrCreated($tag);
 
-        } catch (Throwable $e) {
-            DB::rollBack();
-
-            return res(422, 'param error');
+        } catch (\Throwable $e) {
+            dd($e);
+            \DB::rollBack();
+            return res(500, 'Come back later');
         }
-        DB::commit();
-
-        return res(200, 'success', $tag_db->toArray());
+        \DB::commit();
+        return res(200, 'success', $tag_db);
 
     }
+
+
 }

@@ -26,17 +26,19 @@ use Woisks\Tag\Models\Entity\IndexEntity;
  */
 class IndexRepository
 {
+
     /**
-     * model.  2019/6/14 21:37.
+     * model.  2019/7/28 15:43.
      *
-     * @var static \Woisks\Tag\Models\Entity\IndexEntity
+     * @var static IndexEntity
      */
     private static $model;
 
+
     /**
-     * IndexRepository constructor. 2019/6/14 21:37.
+     * IndexRepository constructor. 2019/7/28 15:43.
      *
-     * @param \Woisks\Tag\Models\Entity\IndexEntity $typeIndex
+     * @param IndexEntity $typeIndex
      *
      * @return void
      */
@@ -45,18 +47,30 @@ class IndexRepository
         self::$model = $typeIndex;
     }
 
-
     /**
-     * firstOrCreated. 2019/7/19 22:05.
+     * firstOrCreated. 2019/7/28 15:43.
      *
-     * @param $type_id
-     * @param $tag_id
+     * @param $type
+     * @param $tag
      *
      * @return mixed
      */
-    public function firstOrCreated($type_id, $tag_id)
+    public function firstOrCreated($type, $tag)
     {
-        return self::$model->firstOrCreate(['tag_id' => $tag_id, 'type_id' => $type_id], ['id' => create_numeric_id()]);
+        $db = self::$model->firstOrCreate(['tag' => $tag, 'type' => $type], ['id' => create_numeric_id()]);
+        $db->increment('count');
+        return $db;
     }
 
+    /**
+     * all. 2019/7/28 16:19.
+     *
+     * @param $type
+     *
+     * @return mixed
+     */
+    public function all($type)
+    {
+        return self::$model->where('type', $type)->paginate();
+    }
 }

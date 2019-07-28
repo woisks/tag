@@ -26,17 +26,19 @@ use Woisks\Tag\Models\Entity\UserEntity;
  */
 class UserRepository
 {
+
     /**
-     * model.  2019/7/19 22:07.
+     * model.  2019/7/28 15:41.
      *
-     * @var static \Woisks\Tag\Models\Entity\UserEntity
+     * @var static UserEntity
      */
     private static $model;
 
+
     /**
-     * UserRepository constructor. 2019/7/19 22:07.
+     * UserRepository constructor. 2019/7/28 15:41.
      *
-     * @param \Woisks\Tag\Models\Entity\UserEntity $user
+     * @param UserEntity $user
      *
      * @return void
      */
@@ -46,22 +48,61 @@ class UserRepository
     }
 
     /**
-     * created. 2019/7/19 22:07.
+     * exists. 2019/7/28 15:41.
      *
-     * @param $uid
-     * @param $tag_id
-     * @param $type_id
+     * @param $account_uid
+     * @param $type
+     * @param $tag
      *
      * @return mixed
      */
-    public function created($uid, $tag_id, $type_id)
+    public function exists($account_uid, $type, $tag)
+    {
+        return self::$model->where('account_uid', $account_uid)->where('type', $type)->where('tag', $tag)->exists();
+
+    }
+
+    /**
+     * created. 2019/7/28 15:41.
+     *
+     * @param $account_uid
+     * @param $type
+     * @param $tag
+     *
+     * @return mixed
+     */
+    public function created($account_uid, $type, $tag)
     {
         return self::$model->create([
             'id'          => create_numeric_id(),
-            'account_uid' => $uid,
-            'tag_id'      => $tag_id,
-            'type_id'     => $type_id
+            'account_uid' => $account_uid,
+            'type'        => $type,
+            'tag'         => $tag
         ]);
     }
 
+    /**
+     * tags. 2019/7/28 16:21.
+     *
+     * @param $type
+     * @param $account_uid
+     *
+     * @return mixed
+     */
+    public function tags($type, $account_uid)
+    {
+        return self::$model->where('account_uid', $account_uid)->where('type', $type)->paginate();
+    }
+
+    /**
+     * all. 2019/7/28 16:31.
+     *
+     * @param $account_uid
+     *
+     * @return mixed
+     */
+    public function all($account_uid)
+    {
+        return self::$model->where('account_uid', $account_uid)->paginate();
+    }
 }

@@ -38,8 +38,8 @@ class UserEntity extends Models
     protected $fillable = [
         'id',
         'account_uid',
-        'type_id',
-        'tag_id',
+        'type',
+        'tag',
         'created_at'
     ];
 

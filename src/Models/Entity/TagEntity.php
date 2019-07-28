@@ -39,6 +39,7 @@ class TagEntity extends Models
         'id',
         'name',
         'count',
+        'status',
         'is_root',
         'is_alias',
         'is_locking'

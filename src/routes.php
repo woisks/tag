@@ -14,12 +14,17 @@ declare(strict_types=1);
 
 
 Route::prefix('tag')
-     ->middleware('throttle:60,1')
-     ->namespace('Woisks\Tag\Http\Controllers')
-     ->group(function () {
+    ->middleware('throttle:60,1')
+    ->namespace('Woisks\Tag\Http\Controllers')
+    ->group(function () {
 
-         Route::get('/', 'GetController@get');
-         Route::middleware('token')->group(function () {
-             Route::post('/', 'CreateController@created');
-         });
-     });
+        Route::get('/', 'GetController@tag');
+        Route::get('/{type}', 'GetController@type')->where(['type' => '[a-z]+']);
+        Route::get('/{type}/{uid}', 'GetController@user')->where(['type' => '[a-z]+', 'uid' => '[0-9]+']);
+
+        Route::middleware('token')->group(function () {
+            Route::post('/', 'CreateController@create');
+        });
+
+
+    });

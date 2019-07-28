@@ -15,14 +15,13 @@ declare(strict_types=1);
 namespace Woisks\Tag\Http\Requests;
 
 
-class GetArrayRequest extends Requests
+class CreateRequest extends Requests
 {
-
     public function rules()
     {
         return [
-            'tag'   => 'required|array',
-            'tag.*' => 'digits_between:18,19'
+            'tag'  => 'required|string|min:2|max:8',
+            'type' => 'required|string|max:20'
         ];
     }
 }

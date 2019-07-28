@@ -21,7 +21,8 @@ class GetRequest extends Requests
     public function rules()
     {
         return [
-            'tag' => 'required|numeric|digits_between:18,19',
+            'tag'   => 'required|array',
+            'tag.*' => 'digits_between:18,19'
         ];
     }
 }
