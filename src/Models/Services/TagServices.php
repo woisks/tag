@@ -12,56 +12,48 @@ declare(strict_types=1);
  * +----------------------------------------------------------------------+
  */
 
-namespace Woisks\Tag\Models\Repository;
+namespace Woisks\Tag\Models\Services;
 
 
 use Woisks\Tag\Models\Entity\TagEntity;
 
 /**
- * Class TagRepository.
+ * Class TagServices.
  *
- * @package Woisks\Tag\Models\Repository
+ * @package Woisks\Tag\Models\Services
  *
- * @Author  Maple Grove  <bolelin@126.com> 2019/6/14 21:28
+ * @Author Maple Grove  <bolelin@126.com> 2019/8/3 21:53
  */
-class TagRepository
+class TagServices
 {
 
     /**
-     * model.  2019/7/28 15:44.
+     * exists. 2019/8/3 21:53.
      *
-     * @var static TagEntity
-     */
-    private static $model;
-
-
-    /**
-     * TagRepository constructor. 2019/7/28 15:44.
-     *
-     * @param TagEntity $tag
-     *
-     * @return void
-     */
-    public function __construct(TagEntity $tag)
-    {
-        self::$model = $tag;
-    }
-
-
-    /**
-     * firstOrCreated. 2019/7/28 15:44.
-     *
-     * @param $tag
+     * @param $tag_id
      *
      * @return mixed
      */
-    public function firstOrCreated($tag)
+    public static function exists($tag_id)
     {
-        $db = self::$model->firstOrCreate(['name' => $tag], ['id' => create_numeric_id()]);
+        return TagEntity::where('id', $tag_id)->exists();
+    }
 
-        $db->increment('count');
+
+    /**
+     * find. 2019/8/3 21:58.
+     *
+     * @param $tags
+     *
+     * @return mixed
+     */
+    public static function find($tags)
+    {
+        $db = TagEntity::find($tags);
+        if ($db->isEmpty()) {
+            return null;
+        }
 
         return $db;
     }
-
 }

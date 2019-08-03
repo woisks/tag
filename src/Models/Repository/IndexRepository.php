@@ -71,6 +71,6 @@ class IndexRepository
      */
     public function all($type)
     {
-        return self::$model->where('type', $type)->paginate();
+        return self::$model->where('type', $type)->orderBy('count', 'desc')->paginate();
     }
 }

@@ -18,11 +18,13 @@ Route::prefix('tag')
     ->namespace('Woisks\Tag\Http\Controllers')
     ->group(function () {
 
-        Route::get('/', 'GetController@tag');
-        Route::get('/{type}', 'GetController@type')->where(['type' => '[a-z]+']);
-        Route::get('/{type}/{uid}', 'GetController@user')->where(['type' => '[a-z]+', 'uid' => '[0-9]+']);
-
+        //获取模块标签
+        Route::get('/{type}', 'GetController@type')->where(['type' => '[a-z_a-z]+']);
+        //获取用户标签
+        Route::get('/{type}/{uid}', 'GetController@user')->where(['type' => '[a-z_a-z]+', 'uid' => '[0-9]+']);
         Route::middleware('token')->group(function () {
+
+            //创建标签
             Route::post('/', 'CreateController@create');
         });
 

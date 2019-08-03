@@ -91,6 +91,7 @@ class CreateController extends BaseController
         $tag  = $request->input('tag');
         $type = $request->input('type');
 
+        //验证创建权限
         $type_db = $this->typeRepo->first($type);
         if (!$type_db) {
             return res(404, 'param type error or not exists ');
@@ -102,20 +103,23 @@ class CreateController extends BaseController
             $type_db->increment('count');
 
             if (!$this->userRepo->exists(JwtService::jwt_account_uid(), $type, $tag)) {
+                //记录用户创建的标签
                 $this->userRepo->created(JwtService::jwt_account_uid(), $type, $tag);
             }
 
-            $this->indexRepo->firstOrCreated($type, $tag);
+            //创建标签索引关系
+            $index = $this->indexRepo->firstOrCreated($type, $tag);
 
+            //标签统计
             $tag_db = $this->tagRepo->firstOrCreated($tag);
 
         } catch (\Throwable $e) {
-            dd($e);
+            
             \DB::rollBack();
             return res(500, 'Come back later');
         }
         \DB::commit();
-        return res(200, 'success', $tag_db);
+        return res(200, 'success', collect($tag_db)->put($type, $index->count));
 
     }
 

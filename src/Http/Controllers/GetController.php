@@ -16,7 +16,6 @@ namespace Woisks\Tag\Http\Controllers;
 
 
 use Illuminate\Http\JsonResponse;
-use Woisks\Tag\Http\Requests\GetRequest;
 use Woisks\Tag\Models\Repository\IndexRepository;
 use Woisks\Tag\Models\Repository\TagRepository;
 use Woisks\Tag\Models\Repository\UserRepository;
@@ -66,25 +65,6 @@ class GetController extends BaseController
         $this->userRepo  = $userRepo;
     }
 
-    /**
-     * get. 2019/7/28 16:12.
-     *
-     * @param GetRequest $request
-     *
-     * @return JsonResponse
-     */
-    public function tag(GetRequest $request)
-    {
-        $tags = $request->input('tag');
-
-        $tag_db = $this->tagRepo->find($tags);
-
-        if ($tag_db->isEmpty()) {
-            return res(422, 'param error');
-        }
-
-        return res(200, 'success', $tag_db);
-    }
 
     /**
      * type. 2019/7/28 16:20.

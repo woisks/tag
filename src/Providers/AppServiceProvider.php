@@ -17,8 +17,21 @@ namespace Woisks\Tag\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Class AppServiceProvider.
+ *
+ * @package Woisks\Tag\Providers
+ *
+ * @Author Maple Grove  <bolelin@126.com> 2019/8/3 22:05
+ */
 class AppServiceProvider extends ServiceProvider
 {
+    /**
+     * boot. 2019/8/3 22:05.
+     *
+     *
+     * @return void
+     */
     public function boot()
     {
         $this->loadRoutesFrom(__DIR__ . '/../routes.php');
