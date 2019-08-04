@@ -28,7 +28,7 @@ class TagServices
 {
 
     /**
-     * exists. 2019/8/3 21:53.
+     * exists. 2019/8/4 20:10.
      *
      * @param $tag_id
      *
@@ -41,19 +41,18 @@ class TagServices
 
 
     /**
-     * find. 2019/8/3 21:58.
+     * name. 2019/8/4 20:09.
      *
-     * @param $tags
+     * @param $tag_id
      *
-     * @return mixed
+     * @return mixed|null
      */
-    public static function find($tags)
+    public static function name($tag_id)
     {
-        $db = TagEntity::find($tags);
-        if ($db->isEmpty()) {
+        $db = TagEntity::where('id', $tag_id)->first();
+        if (!$db) {
             return null;
         }
-
-        return $db;
+        return $db->name;
     }
 }
