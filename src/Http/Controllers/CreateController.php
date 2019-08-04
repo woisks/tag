@@ -25,7 +25,7 @@ use Woisks\Tag\Models\Repository\TypeRepository;
 use Woisks\Tag\Models\Repository\UserRepository;
 
 /**
- * Class CreateController.
+ * Class ChangeController.
  *
  * @package Woisks\Tag\Http\Controllers
  *
@@ -66,7 +66,7 @@ class CreateController extends BaseController
 
 
     /**
-     * CreateController constructor. 2019/8/4 10:32.
+     * ChangeController constructor. 2019/8/4 10:32.
      *
      * @param IndexRepository $indexRepo
      * @param UserRepository $userRepo
