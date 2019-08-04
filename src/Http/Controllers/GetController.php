@@ -16,6 +16,7 @@ namespace Woisks\Tag\Http\Controllers;
 
 
 use Illuminate\Http\JsonResponse;
+use Woisks\Tag\Models\Repository\CountRepository;
 use Woisks\Tag\Models\Repository\IndexRepository;
 use Woisks\Tag\Models\Repository\TagRepository;
 use Woisks\Tag\Models\Repository\UserRepository;
@@ -48,21 +49,30 @@ class GetController extends BaseController
      * @var  UserRepository
      */
     private $userRepo;
+    /**
+     * countRepo.  2019/8/4 10:37.
+     *
+     * @var  CountRepository
+     */
+    private $countRepo;
+
 
     /**
-     * GetController constructor. 2019/7/28 16:20.
+     * GetController constructor. 2019/8/4 10:37.
      *
      * @param TagRepository $tagRepo
      * @param IndexRepository $indexRepo
      * @param UserRepository $userRepo
+     * @param CountRepository $countRepo
      *
      * @return void
      */
-    public function __construct(TagRepository $tagRepo, IndexRepository $indexRepo, UserRepository $userRepo)
+    public function __construct(TagRepository $tagRepo, IndexRepository $indexRepo, UserRepository $userRepo, CountRepository $countRepo)
     {
         $this->tagRepo   = $tagRepo;
         $this->indexRepo = $indexRepo;
         $this->userRepo  = $userRepo;
+        $this->countRepo = $countRepo;
     }
 
 
@@ -105,6 +115,22 @@ class GetController extends BaseController
 
         return res(404, 'data not exists ');
 
+    }
+
+    /**
+     * numeric. 2019/8/4 10:37.
+     *
+     * @param $account_uid
+     *
+     * @return JsonResponse
+     */
+    public function numeric($account_uid)
+    {
+        $db = $this->countRepo->get($account_uid);
+        if ($db->isEmpty()) {
+            return res(404, 'data not exists ');
+        }
+        return res(200, 'success', $db);
     }
 
     /**

@@ -20,6 +20,7 @@ Route::prefix('tag')
 
         //获取模块标签
         Route::get('/{type}', 'GetController@type')->where(['type' => '[a-z_a-z]+']);
+        Route::get('/user/numeric/{uid}', 'GetController@numeric')->where(['uid' => '[0-9]+']);
         //获取用户标签
         Route::get('/{type}/{uid}', 'GetController@user')->where(['type' => '[a-z_a-z]+', 'uid' => '[0-9]+']);
         Route::middleware('token')->group(function () {

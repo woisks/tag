@@ -16,31 +16,38 @@ namespace Woisks\Tag\Models\Entity;
 
 
 /**
- * Class IndexEntity.
+ * Class CountEntity.
  *
  * @package Woisks\Tag\Models\Entity
  *
- * @Author  Maple Grove  <bolelin@126.com> 2019/6/14 21:14
+ * @Author Maple Grove  <bolelin@126.com> 2019/8/4 10:23
  */
-class IndexEntity extends Models
+class CountEntity extends Models
 {
     /**
-     * table.  2019/6/14 21:14.
+     * table.  2019/8/4 10:23.
      *
      * @var  string
      */
-    protected $table = 'tag_index';
+    protected $table = 'tag_user_count';
+
     /**
-     * fillable.  2019/6/14 21:14.
+     * fillable.  2019/8/4 10:23.
      *
      * @var  array
      */
     protected $fillable = [
         'id',
-        'tag',
+        'account_uid',
         'type',
         'count'
     ];
 
+    /**
+     * timestamps.  2019/8/4 10:23.
+     *
+     * @var  bool
+     */
     public $timestamps = false;
+
 }
